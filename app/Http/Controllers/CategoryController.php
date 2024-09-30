@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class CategoryController extends Controller
 {
@@ -64,4 +65,73 @@ class CategoryController extends Controller
         $category->delete();
         return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
     }
+
+    //API REQUESTS
+
+    // API Methods
+
+    // Display a listing of the categories (API)
+    public function apiIndex()
+    {
+        $categories = Category::all();
+        return response()->json([
+            'success' => true,
+            'data' => $categories
+        ], Response::HTTP_OK);
+    }
+
+    // Store a newly created category (API)
+    public function apiStore(Request $request)
+    {
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'parent_id' => 'nullable|exists:categories,id',
+        ]);
+
+        $category = Category::create($validatedData);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Category created successfully.',
+            'data' => $category
+        ], Response::HTTP_CREATED);
+    }
+
+    // Show a category (API)
+    public function apiShow(Category $category)
+    {
+        return response()->json([
+            'success' => true,
+            'data' => $category
+        ], Response::HTTP_OK);
+    }
+
+    // Update a category (API)
+    public function apiUpdate(Request $request, Category $category)
+    {
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'parent_id' => 'nullable|exists:categories,id',
+        ]);
+
+        $category->update($validatedData);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Category updated successfully.',
+            'data' => $category
+        ], Response::HTTP_OK);
+    }
+
+    // Delete a category (API)
+    public function apiDestroy(Category $category)
+    {
+        $category->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Category deleted successfully.',
+        ], Response::HTTP_OK);
+    }
+    
 }

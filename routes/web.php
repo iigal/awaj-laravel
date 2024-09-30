@@ -39,13 +39,13 @@ Route::middleware('auth')->group(function () {
     Route::resource('categories', CategoryController::class);
     Route::resource('comments', CommentController::class);
     Route::resource('issues', IssueController::class);
-    Route::get('/complaints', [ComplaintController::class, 'getComplaintsByUser']);
-    Route::get('/complaint/{id}', [ComplaintController::class, 'show']);
+    //Route::get('/complaints', [ComplaintController::class, 'getComplaintsByUser']);
+    //Route::get('/complaint/{id}', [ComplaintController::class, 'show']);
     Route::get('/profile', [ProfileController::class, 'profile'])->name('profile');
-    Route::get('/profile/{id}', [UserController::class, 'profile']);
-    Route::post('/complaint', [ComplaintController::class, 'store']);
-    Route::post('/complaints/create', [ComplaintController::class, 'create'])->name('complaints.create');
-    Route::get('/complaints/{id}', [ComplaintController::class, 'details'])->name('complaints.details');
+    //Route::get('/profile/{id}', [UserController::class, 'profile']);
+    //Route::post('/complaint', [ComplaintController::class, 'store']);
+    //Route::post('/complaints/create', [ComplaintController::class, 'create'])->name('complaints.create');
+    //Route::get('/complaints/{id}', [ComplaintController::class, 'details'])->name('complaints.details');
     Route::post('/complaint/{id}/comment', [CommentController::class, 'store']);
     // Comments
     Route::post('/complaints/{id}/comments', [CommentController::class, 'addComment'])->name('comments.add');
