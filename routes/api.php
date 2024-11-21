@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\IssueController;
 use App\Http\Controllers\MobileController;
 use App\Http\Controllers\CategoryController;
 
@@ -16,6 +18,11 @@ Route::prefix('categories')->group(function () {
     Route::get('/{category}', [CategoryController::class, 'apiShow']); // Show specific category details (API)
     Route::put('/{category}', [CategoryController::class, 'apiUpdate']); // Update category (API)
     Route::delete('/{category}', [CategoryController::class, 'apiDestroy']); // Delete category (API)
+});
+Route::prefix('issues')->group(function () {
+    Route::get('/', [IssueController::class, 'listIssues']); // Store new category (API)    
+    Route::post('/', [IssueController::class, 'createIssue']); // Store new category (API)    
+    Route::post('/comments', [CommentController::class, 'getCommentsByIssueId']); // Store new category (API)    
 });
 
 Route::get('/', [CategoryController::class, 'index']);

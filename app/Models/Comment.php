@@ -12,7 +12,7 @@ class Comment extends Model
     protected $fillable = [
         'message',
         'user_id',
-        'complaint_id',
+        'issue_id',
         'parent_id',  // For replies
     ];
 
@@ -22,10 +22,10 @@ class Comment extends Model
         return $this->belongsTo(User::class);
     }
 
-    // Relationship: Each comment belongs to a complaint
-    public function complaint()
+    // Relationship: Each comment belongs to a issue
+    public function issue()
     {
-        return $this->belongsTo(Complaint::class);
+        return $this->belongsTo(Issue::class);
     }
 
     // Self-referencing relationship: Parent comment (for replies)

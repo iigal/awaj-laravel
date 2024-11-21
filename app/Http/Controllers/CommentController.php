@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Models\Comment;
 use App\Models\Issue;
+use App\Models\User;
 use Auth;
 
 class CommentController extends Controller
@@ -95,5 +97,13 @@ class CommentController extends Controller
         return redirect()->route('comments.index', $issueId)->with('success', 'Comment deleted successfully.');
     }
 
-
+    // Mobile Api
+    public function getCommentsByIssueId(Request $request)
+    {
+        $comments = Comment::where('issue_id', $request->issue_id)->with('user', 'reply')->get();
+        return response()->json([
+            'success' => true,
+            'data' => $comments
+        ], Response::HTTP_OK);
+    }
 }

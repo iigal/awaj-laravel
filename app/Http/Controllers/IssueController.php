@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Models\Issue;
 use App\Models\Category;
 use App\Models\User;
@@ -83,13 +84,11 @@ class IssueController extends Controller
             'description' => 'required|string',
             'status' => 'required|string|in:open,closed',
             'user_id' => 'required|exists:users,id',
-            'categories' => 'required|array',
-            'categories.*' => 'exists:categories,id',
             'is_published' => 'boolean',
         ]);
 
         $issue = Issue::create($request->all());
-        $issue->categories()->sync($request->categories);
+        // $issue->categories()->sync($request->categories);
         return redirect()->route('issues.index')->with('success', 'Issue created successfully.');
     }
 
@@ -131,5 +130,37 @@ class IssueController extends Controller
     {
         $issue->delete();
         return redirect()->route('issues.index')->with('success', 'Issue deleted successfully.');
+    }
+
+    // Mobile Api
+
+    public function listIssues()
+    {
+        $issues = Issue::with(['categories', 'subcategories'])->get();
+        return response()->json([
+            'success' => true,
+            'data' => $issues
+        ], Response::HTTP_OK);
+    }
+
+    public function createIssue(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'status' => 'string|in:pending,inprogress,other,closed',
+            'user_id' => 'required|exists:users,id',
+            'category_id' => 'required|exists:categories,id',
+            // 'sub_category_id' => 'exists:categories,id',
+            // 'is_published' => 'boolean',
+        ]);
+
+        $issue = Issue::create($request->all());
+        return response()->json([
+            'success' => true,
+            'message' => 'Issue created successfully.',
+            'data' => $issue
+        ], Response::HTTP_CREATED);
+
     }
 }

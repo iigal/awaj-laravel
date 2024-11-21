@@ -11,12 +11,17 @@ class Category extends Model
 
     protected $table = 'categories';
 
-    protected $fillable = ['title'];
+    protected $fillable = ['title','parent_id'];
 
     // Self-referencing relationship: Parent comment (for replies)
     public function parent()
     {
         return $this->belongsTo(Category::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Category::class, 'parent_id');
     }
 
     // Self-referencing relationship: Replies to this comment
