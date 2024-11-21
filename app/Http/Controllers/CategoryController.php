@@ -71,9 +71,13 @@ class CategoryController extends Controller
     // API Methods
 
     // Display a listing of the categories (API)
-    public function apiIndex()
+    public function apiIndex(Request $request)
     {
-        $categories = Category::all();
+        $includeSubcategories = $request->query('include_subcategories', "false");
+        // Query the top-level categories (those without a parent)
+        $categories = Category::whereNull('parent_id')
+            ->with(strtolower($includeSubcategories) == "true" ? 'children' : []) // Eager load children if requested
+            ->get();
         return response()->json([
             'success' => true,
             'data' => $categories
@@ -133,5 +137,4 @@ class CategoryController extends Controller
             'message' => 'Category deleted successfully.',
         ], Response::HTTP_OK);
     }
-    
 }

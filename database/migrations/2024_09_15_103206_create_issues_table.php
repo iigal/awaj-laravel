@@ -6,7 +6,8 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateIssuesTable extends Migration
 {
-    public function up(){
+    public function up()
+    {
         Schema::create('issues', function (Blueprint $table) {
             $table->id();
             $table->string('title');
@@ -19,7 +20,7 @@ class CreateIssuesTable extends Migration
             $table->boolean('is_published')->nullable()->default(false);
             $table->timestamps();
         });
-    }   
+    }
 
     public function down()
     {

@@ -21,7 +21,6 @@ class CreateCategoriesTable extends Migration
             $table->integer('sorting')->default('0');
             $table->timestamps();
         });
-
         Schema::create('category_issue', static function (Blueprint $table) {
             $table->id();
 
@@ -38,6 +37,7 @@ class CreateCategoriesTable extends Migration
             $table->timestamps();
         });
     }
+    
 
     public function down()
     {
