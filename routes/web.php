@@ -19,7 +19,7 @@ Route::get('/', function () {
 // Route::middleware('auth:admin')->group(function () {
 //     Route::get('/admin/applicationrequest', [AdminController::class, 'applicationRequest']);
 //     Route::get('/admin/type', [AdminController::class, 'getType']);
-//     Route::get('/admin/complaints', [AdminController::class, 'list']);
+//     Route::get('/admin/issues', [AdminController::class, 'list']);
 //     Route::get('/admin/details/{id}', [AdminController::class, 'getDetails']);
 //     Route::get('/admin/dashboard', [AdminController::class, 'getDashboard']);
 //     Route::get('/admin/profile/{id}', [AdminController::class, 'getProfile']);
@@ -28,8 +28,8 @@ Route::get('/', function () {
 //     Route::post('/admin/details/{id}', [AdminController::class, 'updateDetails']);
 //     Route::post('/admin/applicationrequest/{id}', [AdminController::class, 'updateApplicationRequest']);
 //     Route::post('/admin/type', [AdminController::class, 'addType']);
-//     Route::post('/{complaintid}/addcomment', [AdminController::class, 'addComment']);
-//     Route::post('/{complaintid}/{commentid}/{userid}/replycomment', [AdminController::class, 'replyComment']);
+//     Route::post('/{issueid}/addcomment', [AdminController::class, 'addComment']);
+//     Route::post('/{issueid}/{commentid}/{userid}/replycomment', [AdminController::class, 'replyComment']);
 // });
 
 //Route::get('/admin/logout', [AdminController::class, 'logout']);
@@ -39,17 +39,18 @@ Route::middleware('auth')->group(function () {
     Route::resource('categories', CategoryController::class);
     Route::resource('comments', CommentController::class);
     Route::resource('issues', IssueController::class);
-    //Route::get('/complaints', [ComplaintController::class, 'getComplaintsByUser']);
-    //Route::get('/complaint/{id}', [ComplaintController::class, 'show']);
+    //Route::get('/issues', [ComplaintController::class, 'getComplaintsByUser']);
+    //Route::get('/issue/{id}', [ComplaintController::class, 'show']);
     Route::get('/profile', [ProfileController::class, 'profile'])->name('profile');
     //Route::get('/profile/{id}', [UserController::class, 'profile']);
-    //Route::post('/complaint', [ComplaintController::class, 'store']);
-    //Route::post('/complaints/create', [ComplaintController::class, 'create'])->name('complaints.create');
-    //Route::get('/complaints/{id}', [ComplaintController::class, 'details'])->name('complaints.details');
-    Route::post('/complaint/{id}/comment', [CommentController::class, 'store']);
+    //Route::post('/issue', [ComplaintController::class, 'store']);
+    //Route::post('/issues/create', [ComplaintController::class, 'create'])->name('issues.create');
+    //Route::get('/issues/{id}', [ComplaintController::class, 'details'])->name('issues.details');
+    Route::get('/issues/{id}/comments', [CommentController::class, 'index']);
+    Route::post('/issues/{id}/comments', [CommentController::class, 'store']);
     // Comments
-    Route::post('/complaints/{id}/comments', [CommentController::class, 'addComment'])->name('comments.add');
-    Route::post('/complaints/{id}/comments/{commentId}/reply', [CommentController::class, 'reply'])->name('comments.reply');
+    Route::post('/issues/{id}/comments', [CommentController::class, 'addComment'])->name('comments.addComment');
+    Route::post('/issues/{id}/comments/{commentId}/reply', [CommentController::class, 'reply'])->name('comments.reply');
 
 });
 

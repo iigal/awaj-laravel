@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\Issue;
@@ -96,7 +97,8 @@ class IssueController extends Controller
     public function show(Issue $issue)
     {
         $issue->load('user', 'categories');
-        return view('issues.show', compact('issue'));
+        $comments = Comment::where('issue_id', $issue->id)->with('user', 'parent')->get();
+        return view('issues.show', compact('issue','comments'));
     }
 
     // Show the form for editing the specified resource

@@ -42,15 +42,17 @@ class CommentController extends Controller
     // Display a listing of the comments for a specific issue
     public function index(Issue $issue)
     {
+        // $issue = Issue::findOrFail($id);
         $comments = Comment::where('issue_id', $issue->id)->with('user', 'parent')->get();
         return view('comments.index', compact('comments', 'issue'));
     }
 
     // Show the form for creating a new comment
-    public function create(Issue $issue)
+    public function create(Request $request)
     {
         $users = User::all();
-        $comments = Comment::where('issue_id', $issue->id)->get();
+        $issue = Issue::findOrFail($request->issue);
+        $comments = Comment::where('issue_id', $request->issue)->get();
         return view('comments.create', compact('issue', 'users', 'comments'));
     }
 
@@ -65,7 +67,7 @@ class CommentController extends Controller
         ]);
 
         Comment::create($request->all());
-        return redirect()->route('comments.index', $request->issue_id)->with('success', 'Comment added successfully.');
+        return redirect()->route('comments.index', $request->issue)->with('success', 'Comment added successfully.');
     }
 
     // Show the form for editing the specified comment
