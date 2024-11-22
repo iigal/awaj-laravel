@@ -50,6 +50,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/issues/{id}/comments', [CommentController::class, 'store']);
     // Comments
     Route::post('/issues/{id}/comments', [CommentController::class, 'addComment'])->name('comments.addComment');
+
+    Route::get('/issues/{id}/comments/{commentId}/reply', [CommentController::class, 'showReply'])->name('comments.showReply');
     Route::post('/issues/{id}/comments/{commentId}/reply', [CommentController::class, 'reply'])->name('comments.reply');
 
 });

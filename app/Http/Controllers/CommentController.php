@@ -24,6 +24,13 @@ class CommentController extends Controller
         return redirect()->route('issues.details', $issueId);
     }
 
+    public function showReply(Issue $issue, Comment $comments)
+    {
+        $users = User::all();
+        $has_parent = true;
+        return view('comments.create', compact('comments', 'issue', 'users', 'has_parent'));
+    }
+
     public function reply(Request $request, $issueId, $commentId)
     {
         $request->validate(['reply' => 'required']);
@@ -50,10 +57,11 @@ class CommentController extends Controller
     // Show the form for creating a new comment
     public function create(Request $request)
     {
+        $has_parent = false;
         $users = User::all();
         $issue = Issue::findOrFail($request->issue);
         $comments = Comment::where('issue_id', $request->issue)->get();
-        return view('comments.create', compact('issue', 'users', 'comments'));
+        return view('comments.create', compact('issue', 'users', 'comments','has_parent'));
     }
 
     // Store a newly created comment in storage

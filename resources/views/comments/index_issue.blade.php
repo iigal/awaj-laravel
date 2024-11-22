@@ -18,6 +18,7 @@
                 <td>{{ $comment->user->name }}</td>
                 <td>{{ $comment->parent ? $comment->parent->message : 'None' }}</td>
                 <td>
+                    <a href="{{ route('comments.showReply', [$issue,$comment]) }}" class="btn btn-info btn-sm">Reply</a>
                     <a href="{{ route('comments.edit', $comment->id) }}" class="btn btn-warning btn-sm">Edit</a>
                     <form action="{{ route('comments.destroy', $comment->id) }}" method="POST"
                         style="display:inline-block;">
