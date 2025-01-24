@@ -5,8 +5,9 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
 
@@ -31,7 +32,7 @@ class User extends Authenticatable
     // Relationship: One user can have many complaints
     public function complaints()
     {
-        return $this->hasMany(Complaint::class);
+        return $this->hasMany(Issue::class);
     }
 
     // Relationship: One user can have many comments

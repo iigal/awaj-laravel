@@ -12,11 +12,12 @@ class CreateIssuesTable extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
+            $table->smallInteger('progress')->default(0);
             $table->json('images')->nullable();
             $table->foreignId('user_id')
                 ->constrained()
                 ->onDelete('cascade');
-            $table->enum('status', ['Success', 'Queue', 'Progress']);
+            $table->string('status',255)->default("pending");
             $table->boolean('is_published')->nullable()->default(false);
             $table->timestamps();
         });

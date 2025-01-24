@@ -25,6 +25,11 @@
         </div>
 
         <div class="mb-3">
+            <label for="progress_per" class="form-label">Progress %</label>
+            <input name="progress_per" type="range" class="form-range" id="progress_per" value="{{ $issue->progress }}">
+        </div>
+
+        <div class="mb-3">
             <label for="categories" class="form-label">Categories</label>
             <select name="categories[]" id="categories" class="form-select" multiple required>
                 @foreach($categories as $category)

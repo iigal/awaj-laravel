@@ -24,6 +24,11 @@ This view is for editing an existing issue.
         </div>
 
         <div class="mb-3">
+            <label for="progress_per" class="form-label">Progress %</label>
+            <input name="progress_per" type="range" class="form-range" id="progress_per" value="{{ $issue->progress }}">
+        </div>
+
+        <div class="mb-3">
             <label for="status" class="form-label">Status</label>
             <select name="status" id="status" class="form-select" required>
                 <option value="queue" {{ $issue->status == 'queue' ? 'selected' : '' }}>Queue</option>

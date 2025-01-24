@@ -61,7 +61,7 @@ class CommentController extends Controller
         $users = User::all();
         $issue = Issue::findOrFail($request->issue);
         $comments = Comment::where('issue_id', $request->issue)->get();
-        return view('comments.create', compact('issue', 'users', 'comments','has_parent'));
+        return view('comments.create', compact('issue', 'users', 'comments', 'has_parent'));
     }
 
     // Store a newly created comment in storage
@@ -110,10 +110,26 @@ class CommentController extends Controller
     // Mobile Api
     public function getCommentsByIssueId(Request $request)
     {
-        $comments = Comment::where('issue_id', $request->issue_id)->with('user', 'reply')->get();
+        $comments = Comment::where('issue_id', $request->issue_id)
+            ->whereNull('parent_id') // Get only root comments
+            ->with('reply') // Load replies for each comment
+            ->get();
         return response()->json([
             'success' => true,
             'data' => $comments
+        ], Response::HTTP_OK);
+    }
+    public function addCommentByIssueId(Request $request)
+    {
+        $validatedData = $request->validate([
+            'message' => 'required|string',
+            'user_id' => 'required|exists:users,id',
+            'parent_id' => 'nullable|exists:comments,id',
+            'issue_id' => 'required|exists:issues,id',
+        ]);
+        Comment::create($validatedData);
+        return response()->json([
+            'success' => true,
         ], Response::HTTP_OK);
     }
 }

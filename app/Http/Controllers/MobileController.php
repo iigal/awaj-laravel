@@ -67,11 +67,46 @@ class MobileController extends Controller
             if (!$token = JWTAuth::attempt($credentials)) {
                 return response()->json(['error' => 'Invalid Credentials'], 401);
             }
-            return response()->json(compact('token'));
+            $user = User::where('email', $request->email)->first();
+            return response()->json(compact('token', 'user'), 200);
         } catch (JWTException $e) {
             return response()->json(['error' => 'Could not create token'], 500);
         }
     }
+
+    public function relogin(Request $request)
+    {
+        // Get the token from the request (usually in the Authorization header)
+        $token = $request->header('Authorization');
+
+        if (!$token) {
+            return response()->json(['error' => 'No token provided'], 401);
+        }
+
+        try {
+            // Parse the token and authenticate the user
+            $user = JWTAuth::parseToken()->authenticate();
+
+            // Check if the user is found
+            if (!$user) {
+                return response()->json(['error' => 'User not found'], 404);
+            }
+
+            // If valid, return the user data and a new token (if needed)
+            // Optionally, you can issue a new token to extend the session
+            $newToken = JWTAuth::fromUser($user);
+
+            return response()->json([
+                'token' => $newToken, // You can return the same token or generate a new one
+                'user' => $user
+            ], 200);
+
+        } catch (JWTException $e) {
+            // Token is invalid or expired
+            return response()->json(['error' => 'Token is invalid or expired'], 401);
+        }
+    }
+
 
     // Generate and send OTP for mobile API
     public function sendOtp(Request $request)
@@ -88,8 +123,8 @@ class MobileController extends Controller
         try {
             Mail::send([], [], function ($message) use ($email, $otpCode) {
                 $message->to($email)
-                        ->subject('Your OTP Code')
-                        ->setBody('Your OTP code is ' . $otpCode);
+                    ->subject('Your OTP Code')
+                    ->setBody('Your OTP code is ' . $otpCode);
             });
 
             return response()->json(['message' => 'OTP sent successfully'], 200);
