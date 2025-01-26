@@ -4,6 +4,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\IssueController;
 use App\Http\Controllers\MobileController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\AuthOtpController;
 use App\Http\Middleware\JwtTokenAuth;
 use Illuminate\Support\Facades\Route;
 
@@ -36,6 +37,7 @@ Route::prefix('issues')->group(function () {
     Route::post('/comments/create', [CommentController::class, 'addCommentByIssueId']); // Store new category (API)    
 });
 // });
+
 
 
 
