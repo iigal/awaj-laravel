@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('address');
             $table->string('phonenumber',10);
-            $table->string('voterid',15);
+            $table->string('healthid',15);
             $table->boolean('is_verified')->default(FALSE);
             $table->string('role')->default('user');
             $table->rememberToken();

@@ -5,19 +5,19 @@ namespace App\Http\Controllers;
 use App\Models\Complaint;
 use App\Models\User;
 use App\Models\Otp;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Validator;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Support\Str;
 use JWTAuth;
+use App\Http\Requests\RegisterRequest;
+use App\Http\Services\RegisterService;
+use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
 class MobileController extends Controller
 {
     // Fetch all public complaints for mobile API
-    public function allPublicComplaints(Request $request)
+    /* public function allPublicComplaints(Request $request)
     {
         try {
             $complaints = Complaint::where('category', 'public')
@@ -30,36 +30,25 @@ class MobileController extends Controller
             return response()->json(['error' => 'Something went wrong', 'message' => $e->getMessage()], 500);
         }
     }
-
+ */
     // Register a new user for mobile API
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6|confirmed',
-            'name' => 'required|string|max:255'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
+        $data = $request->all();
         try {
-            $user = new User();
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->password = Hash::make($request->password);
-            $user->save();
+            $registerService = new RegisterService();
+            $user = $registerService->register($request->all());
 
-            $token = JWTAuth::fromUser($user);
-            return response()->json(compact('user', 'token'), 201);
+            //$token = JWTAuth::fromUser($user);
+            return response()->json(compact('user'/*, 'token'*/), 201);
         } catch (\Exception $e) {
+            \Log::error('User Registration Failed: ' . $e->getMessage());
             return response()->json(['error' => 'User Registration Failed', 'message' => $e->getMessage()], 409);
         }
     }
 
     // Handle user login for mobile API
-    public function login(Request $request)
+   /*  public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
 
@@ -150,5 +139,5 @@ class MobileController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => 'Image upload failed', 'message' => $e->getMessage()], 500);
         }
-    }
+    } */
 }

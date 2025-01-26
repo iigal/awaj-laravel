@@ -40,12 +40,12 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label for="voterid" class="col-md-4 col-form-label text-md-end">{{ __('voterid') }}</label>
+                            <label for="healthid" class="col-md-4 col-form-label text-md-end">{{ __('HealthID (optional)') }}</label>
 
                             <div class="col-md-6">
-                                <input id="voterid" type="text" class="form-control @error('voterid') is-invalid @enderror" name="voterid" value="{{ old('voterid') }}" required autocomplete="voterid" autofocus>
+                                <input id="healthid" type="text" class="form-control @error('healthid') is-invalid @enderror" name="healthid" value="{{ old('healthid') }}" autocomplete="healthid" autofocus>
 
-                                @error('voterid')
+                                @error('healthid')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
